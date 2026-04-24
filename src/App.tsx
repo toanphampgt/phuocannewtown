@@ -905,6 +905,37 @@ export default function App() {
          </div>
       </section>
 
+      {/* Featured Image 7 Showcase */}
+      <section className="w-full relative bg-white pb-8 md:pb-16 z-20">
+         <div className="w-full overflow-hidden relative cursor-pointer group shadow-2xl">
+            {/* The Image */}
+            <motion.img 
+               initial={{ opacity: 0, filter: "blur(10px)", scale: 1.05 }}
+               whileInView={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
+               transition={{ duration: 0.8, ease: "easeOut" }}
+               viewport={{ once: true, margin: "-100px" }}
+               src="/phuocan7.png" 
+               alt="Không gian Phước An" 
+               className="w-full h-auto object-cover block relative z-10 transition-transform duration-[2000ms] group-hover:scale-[1.02]"
+               referrerPolicy="no-referrer"
+            />
+            
+            {/* Light Sweep Effect */}
+            <motion.div 
+               className="absolute inset-0 w-[200%] h-[200%] bg-gradient-to-r from-transparent via-white/40 to-transparent -rotate-45 pointer-events-none z-20 mix-blend-overlay"
+               animate={{ x: ["-150%", "150%"] }}
+               transition={{ duration: 2.5, repeat: Infinity, ease: "linear", repeatDelay: 2 }}
+            />
+            
+            {/* Subtle dynamic pulse overlay */}
+            <motion.div 
+              className="absolute inset-0 bg-primary-900/5 pointer-events-none z-20 transition-opacity"
+              animate={{ opacity: [0, 1, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            />
+         </div>
+      </section>
+
       {/* Master Plan */}
       <section id="mặt-bằng" className="pt-12 md:pt-24 pb-12 bg-white">
          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
