@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://khuphomoiphuocan.com.vn/sitemap.xml
