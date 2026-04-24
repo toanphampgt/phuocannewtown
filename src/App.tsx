@@ -8,6 +8,34 @@ export default function App() {
   const [currentGalleryImage, setCurrentGalleryImage] = useState(0);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    
+    try {
+      const response = await fetch("https://formsubmit.co/ajax/toanpham.pgt@gmail.com", {
+        method: "POST",
+        body: formData
+      });
+      
+      if (response.ok) {
+        setShowSuccessPopup(true);
+        form.reset();
+      } else {
+        alert("Có lỗi xảy ra, vui lòng thử lại sau.");
+      }
+    } catch (error) {
+      alert("Có lỗi xảy ra, vui lòng thử lại sau.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const galleryImages = [
     "/phuoc-an-new-town (25).png",
@@ -1181,7 +1209,7 @@ export default function App() {
                   />
                   <div className="p-1 md:p-2 rounded-[2rem] border border-white/20 bg-white/10 backdrop-blur-md shadow-2xl relative">
                     <div className="bg-white rounded-[1.5rem] p-5 md:p-10 shadow-inner">
-                       <form action="https://formsubmit.co/toanpham.pgt@gmail.com" method="POST" target="_blank" className="flex flex-col gap-6 text-left">
+                       <form onSubmit={handleFormSubmit} className="flex flex-col gap-6 text-left">
                           <input type="hidden" name="_captcha" value="false" />
                           <input 
                              type="text"
@@ -1211,11 +1239,15 @@ export default function App() {
                              className="w-full bg-transparent border-b-2 border-gray-200 px-2 py-3 text-primary-900 placeholder:text-gray-400 font-sans text-[19px] focus:outline-none focus:border-gold-500 transition-colors"
                           />
                           <div className="flex justify-center mt-6">
-                             <button type="submit" className="flex items-center justify-center gap-2 px-3 sm:px-4 md:px-8 py-3 bg-gold-500 hover:bg-gold-600 text-white font-bold rounded-full transition-all hover:scale-105 uppercase text-[14px] sm:text-[16px] md:text-[19px] shadow-lg hover:shadow-xl w-full md:w-auto mx-auto md:mx-0 whitespace-nowrap overflow-hidden">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 md:h-5 md:w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                </svg>
-                                Gửi thông tin
+                             <button type="submit" disabled={isSubmitting} className="flex items-center justify-center gap-2 px-3 sm:px-4 md:px-8 py-3 bg-gold-500 hover:bg-gold-600 text-white font-bold rounded-full transition-all hover:scale-105 uppercase text-[14px] sm:text-[16px] md:text-[19px] shadow-lg hover:shadow-xl w-full md:w-auto mx-auto md:mx-0 whitespace-nowrap overflow-hidden disabled:opacity-70 disabled:hover:scale-100 disabled:cursor-not-allowed">
+                                {isSubmitting ? (
+                                   <div className="w-5 h-5 border-2 border-white/50 border-t-white rounded-full animate-spin shrink-0"></div>
+                                ) : (
+                                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 md:h-5 md:w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                   </svg>
+                                )}
+                                {isSubmitting ? "Đang gửi..." : "Gửi thông tin"}
                              </button>
                           </div>
                        </form>
@@ -1274,6 +1306,62 @@ export default function App() {
             <span className="absolute right-full mr-4 bg-white text-gray-800 px-3 py-1 rounded hidden group-hover:block whitespace-nowrap shadow uppercase text-xs font-bold font-sans">Gọi Hotline ngay</span>
          </a>
       </div>
+      {/* Success Popup */}
+      <AnimatePresence>
+        {showSuccessPopup && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+              onClick={() => setShowSuccessPopup(false)}
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="relative bg-white rounded-3xl shadow-2xl p-6 md:p-10 max-w-lg w-full text-center z-10 overflow-hidden"
+            >
+              <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-gold-400 via-gold-500 to-gold-600"></div>
+              <button 
+                onClick={() => setShowSuccessPopup(false)}
+                className="absolute top-5 right-5 text-gray-400 hover:text-gray-900 transition-colors bg-gray-100 hover:bg-gray-200 rounded-full p-2"
+                title="Đóng"
+              >
+                <X className="w-5 h-5" />
+              </button>
+              
+              <div className="w-24 h-24 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-6 relative">
+                <div className="absolute inset-0 bg-green-100 rounded-full animate-ping opacity-20"></div>
+                <CheckCircle className="w-12 h-12 text-green-500 relative z-10" />
+              </div>
+              
+              <h3 className="text-3xl font-bold font-serif text-primary-900 mb-4">
+                Cảm ơn!
+              </h3>
+              
+              <p className="text-gray-600 font-sans text-lg mb-6 leading-relaxed">
+                Anh/chị đã gửi thông tin thành công. Sẽ có nhân viên liên hệ lại Anh/chị trong thời gian sớm nhất.
+              </p>
+              
+              <div className="bg-blue-50/50 rounded-2xl p-5 mb-8 border border-blue-100/50">
+                <p className="text-blue-900 font-medium mb-2 opacity-80">Hotline hỗ trợ:</p>
+                <a href="tel:0935352888" className="text-3xl font-black text-[#02bced] hover:text-blue-600 transition-colors drop-shadow-sm">
+                  0935.352.888
+                </a>
+              </div>
+              
+              <button 
+                onClick={() => setShowSuccessPopup(false)}
+                className="w-full py-4 bg-[#02bced] hover:bg-blue-600 text-white font-bold rounded-xl transition-all hover:scale-105 uppercase tracking-wider shadow-lg hover:shadow-xl shadow-blue-500/20"
+              >
+                Đóng thông báo
+              </button>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
