@@ -160,9 +160,10 @@ export default function App() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="text-xl md:text-2xl text-gray-100 font-light mb-10 max-w-3xl mx-auto"
+            className="text-xl md:text-2xl text-gray-100 font-light mb-10 max-w-5xl mx-auto"
           >
-            Đất nền trung tâm Tiên Phước, Quảng Nam có sổ đỏ – Đón đầu cơ hội đầu tư sinh lời vượng bền tại Đô thị sinh thái ven sông Tiên
+            Đất nền trung tâm Tiên Phước, TP. Đà Nẵng, đã có sổ đỏ – <br className="hidden md:block" />
+            Đón đầu cơ hội đầu tư sinh lời vững bền tại Đô thị sinh thái ven sông&nbsp;Tiên
           </motion.h2>
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
